@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Jasson">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JASSO | Galería</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/barfiller.css" type="text/css">
+    <link rel="stylesheet" href="css/nowfont.css" type="text/css">
+    <link rel="stylesheet" href="css/rockville.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/galeria.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap"
+    
+        rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .upper-section {}
+
+        .lower-section {
+
+            flex: 1;
+        }
+        .lottie-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        text-align: center;
+        margin-top: 10px;
+        width: 120px; /* Ajusta el ancho según sea necesario */
+    }
+    </style>
+</head>
+<!-- {
+  "hosting": {
+    "site": "iriana-rifas",
+
+    "public": "public",
+    ...
+  }
+} -->
+<script>
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAw1sq90UL2F7BcO-09yReRjrM3ZNxl5S4",
+  authDomain: "irianaapp-9bc0d.firebaseapp.com",
+  projectId: "irianaapp-9bc0d",
+  storageBucket: "irianaapp-9bc0d.appspot.com",
+  messagingSenderId: "312569676343",
+  appId: "1:312569676343:web:e5cd644c3deafbc4ebb5b2",
+  measurementId: "G-NYSC0881FG"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+</script>
+<body>
+    <div class="content">
+        <!-- Upper Section Begin -->
+        <section class="upper-section" style="position: relative;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title">
+                            <h2>Iriana</h2>
+                        </div>
+                        <p style="color: white;">Selecciona tus números :)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lottie-container">
+                <div id="lottie-animation" style="width: 100px; height: 100px;"></div>
+                <p style="color: white; line-height: 1">Prueba suerte con la ruleta</p>
+            </div>
+        </section>
+        
+        
+        
+        
+        
+        <!-- Upper Section End -->
+
+        <!-- Lower Section Begin -->
+        <!-- Lower Section Begin -->
+        <!-- Lower Section Begin -->
+        <!-- Lower Section Begin -->
+        <!-- Lower Section Begin -->
+        <!-- Lower Section Begin -->
+        <section class="lower-section">
+            <div class="container" style=" padding-left: 30px;">
+                <div class="row justify-content-left">
+                    <!-- Card 00 -->
+                    <div class="col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0;">
+                        <div class="card text-white bg-primary" style="border-radius: 10px;">
+                            <div class="card-body p-0 text-center" style="padding: 0;">
+                                <h3 class="card-title mb-0">02</h3>
+                            </div>
+                            <p style="font-size: 10px; line-height: 1; text-align: center;">Jorge Melendez</p>
+                        </div>
+                    </div>
+                  
+                  
+                   
+                   
+            </div>
+                </div>
+            </div>
+        </section>
+        
+        <script>
+            var animation = lottie.loadAnimation({
+                container: document.getElementById('lottie-animation'), // Contenedor donde se mostrará la animación
+                renderer: 'svg', // Tipo de renderizado (svg, canvas, html)
+                loop: true, // Indica si la animación debe repetirse
+                autoplay: true, // Indica si la animación debe empezar automáticamente
+                path: 'img/loteria.json' // Ruta al archivo JSON de la animación
+            });
+        </script>
+        
+
+
+
+        <!-- Lower Section End -->
+    </div>
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/jquery.barfiller.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    <!-- <script src="./jsProject/galeria.js"></script> -->
+    <script src="js/jplayerInit.js"></script>
+</body>
+
+</html>
