@@ -132,56 +132,92 @@ function obtenerRifa(idRifa) {
 
 
 function obtenerNumeros(idRifa) {
-  // Realiza una consulta en la colección "numeroRifa" donde el campo "idRifa" coincida con el ID proporcionado
-  db.collection("numeroRifa").where("idRifa", "==", idRifa).orderBy("numero", "asc")
-    .onSnapshot((querySnapshot) => {
-      numerosDisponibles = []
-      var plantilla = "";
-      // Itera sobre los documentos encontrados
-      querySnapshot.forEach((doc) => {
-        // Obtén los datos del documento
-        const numeros = doc.data();
-        let color;
-        let estado;
-        // Determina el color y el estado de la tarjeta según el estado del número
-        switch (numeros.estado) {
-          case "seleccionado":
-            color = "bg-warning";
-            estado = "Seleccionado";
-            break;
-          case "pagado":
-            color = "bg-danger";
-            estado = "Pagado";
-            break;
-          case "disponible":
-            numerosDisponibles.push(numeros.numero);
-            color = "bg-success";
-            estado = "Disponible";
-            break;
-          default:
-            color = "bg-primary";
-            estado = "Desconocido";
-        }
+  // Primero consulta la rifa para verificar si tiene un ganador
+  db.collection("rifa").doc(idRifa).get().then((docRifa) => {
+    if (docRifa.exists) {
+      const rifa = docRifa.data();
+      const ganador = rifa.ganador && rifa.ganador.trim() !== "" ? rifa.ganador.trim() : "";
 
-        // Construye la plantilla de la tarjeta con el color y el estado determinados
-        plantilla += `
-        <div class="tarjeta col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0;" data-id="${numeros.id}" data-numero="${numeros.numero}" data-estado="${numeros.estado}" >
-          <div class="card text-white ${color}" style="border-radius: 10px;" >
-            <div class="card-body p-0 text-center" style="padding: 0;">
-              <h3 class="card-title mb-0">${numeros.numero}</h3>
+      // Luego realiza una consulta en la colección "numeroRifa" para obtener los números
+      db.collection("numeroRifa").where("idRifa", "==", idRifa).orderBy("numero", "asc")
+        .onSnapshot((querySnapshot) => {
+          let plantilla = "";
+
+          // Itera sobre los documentos encontrados
+          querySnapshot.forEach((doc) => {
+            const numeros = doc.data();
+            let color;
+            let estado;
+            let tarjetaClass = ganador ? "" : "tarjeta"; // Si hay un ganador definido, quita la clase 'tarjeta' para que no sea cliccable
+
+            // Si es el ganador, asigna el color rojo, de lo contrario, asigna colores según el estado del número
+            if (ganador !== "" && numeros.numero === ganador) {
+              console.log(numeros.numero +"-"+ ganador)
+              color = "bg-danger";
+              estado = "Ganador";
+              tarjetaClass = ""; // Quita la clase 'tarjeta' para que no sea cliccable
+            } else {            
+              if(ganador !== ""){
+                console.log(numeros.numero +"-"+ ganador)
+                color = "bg-secondary";
+                estado = "Desconocido";
+              }else{
+                console.log(numeros.numero +"-"+ ganador)
+                switch (numeros.estado) {
+                case "seleccionado":
+                  color = "bg-warning";
+                  estado = "seleccionado";
+                  break;
+                case "pagado":
+                  color = "bg-danger";
+                  estado = "pagado";
+                  break;
+                case "disponible":
+                  color = "bg-success";
+                  estado = "disponible";
+                  break;
+                default:
+                  color = "bg-secondary";
+                  estado = "Desconocido";
+              }
+              }
+            
+              
+            }
+
+            // Construye la plantilla de la tarjeta con el color y el estado determinados
+            plantilla += `
+            <div class="${tarjetaClass} col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0; cursor: ${ganador ? "default" : "pointer"};" data-id="${numeros.id}" data-numero="${numeros.numero}" data-estado="${estado}" >
+              <div class="card text-white ${color}" style="border-radius: 10px;" >
+                <div class="card-body p-0 text-center" style="padding: 0;">
+                  <h3 class="card-title mb-0">${numeros.numero}</h3>
+                </div>
+                <p style="font-size: 10px; line-height: 1; text-align: center;">${numeros.nombreCliente}</p>
+              </div>
             </div>
-            <p style="font-size: 10px; line-height: 1; text-align: center;">${numeros.nombreCliente}</p>
-          </div>
-        </div>
-        `;
-      });
+            `;
+          });
 
-      // Actualiza el contenido del elemento con el id "listadoNumeros" en el DOM
-      $("#listadoNumeros").html(plantilla);
-    }, (error) => {
-      console.log("Error obteniendo números de la rifa:", error);
-    });
+          // Actualiza el contenido del elemento con el id "listadoNumeros" en el DOM
+          $("#listadoNumeros").html(plantilla);
+        }, (error) => {
+          console.log("Error obteniendo números de la rifa:", error);
+        });
+    } else {
+      console.log("La rifa con el ID proporcionado no existe.");
+    }
+  }).catch((error) => {
+    console.log("Error obteniendo los datos de la rifa:", error);
+  });
 }
+
+
+
+
+
+
+
+
 // data-toggle="modal" data-target=".bd-example-modal-sm"
 
 function detectarClic() {
