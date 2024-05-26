@@ -115,8 +115,8 @@ function obtenerRifa(idRifa) {
 
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
-        const valorFormateado = rifa.valor.toLocaleString('es-CO', options);
-        $("#valor").text(`Valor: ${valorFormateado}`);
+       
+        $("#valor").text(`Valor: ${rifa.valor}`);
         $("#loteria").text(`Lotería: ${rifa.loteria}`);
         $("#titulo").text(rifa.titulo);
         const fecha = new Date(rifa.fechaRifa);
@@ -148,35 +148,39 @@ function obtenerNumeros(idRifa) {
             const numeros = doc.data();
             let color;
             let estado;
+            let seleccionado="";
             let tarjetaClass = ganador ? "" : "tarjeta"; // Si hay un ganador definido, quita la clase 'tarjeta' para que no sea cliccable
 
             // Si es el ganador, asigna el color rojo, de lo contrario, asigna colores según el estado del número
-            if (ganador !== "" && numeros.numero === ganador) {
-              console.log(numeros.numero +"-"+ ganador)
+            if (ganador !== "" && numeros.numero === ganador) {           
               color = "bg-danger";
               estado = "Ganador";
+              seleccionado=""
               tarjetaClass = ""; // Quita la clase 'tarjeta' para que no sea cliccable
             } else {            
-              if(ganador !== ""){
-                console.log(numeros.numero +"-"+ ganador)
+              if(ganador !== ""){               
                 color = "bg-secondary";
                 estado = "Desconocido";
-              }else{
-                console.log(numeros.numero +"-"+ ganador)
+              }else{               
                 switch (numeros.estado) {
                 case "seleccionado":
+                  seleccionado = "nombreCliente";
                   color = "bg-warning";
                   estado = "seleccionado";
                   break;
                 case "pagado":
+                  seleccionado = "nombreClienteBlanco";
                   color = "bg-danger";
                   estado = "pagado";
                   break;
                 case "disponible":
+                  seleccionado = "nombreClienteBlanco";
+                  numerosDisponibles.push(numeros.numero)
                   color = "bg-success";
                   estado = "disponible";
                   break;
                 default:
+                  seleccionado = "nombreClienteBlanco";
                   color = "bg-secondary";
                   estado = "Desconocido";
               }
@@ -188,11 +192,11 @@ function obtenerNumeros(idRifa) {
             // Construye la plantilla de la tarjeta con el color y el estado determinados
             plantilla += `
             <div class="${tarjetaClass} col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0; cursor: ${ganador ? "default" : "pointer"};" data-id="${numeros.id}" data-numero="${numeros.numero}" data-estado="${estado}" >
-              <div class="card text-white ${color}" style="border-radius: 10px;" >
+              <div class="card  ${color}" style="border-radius: 10px;" >
                 <div class="card-body p-0 text-center" style="padding: 0;">
-                  <h3 class="card-title mb-0">${numeros.numero}</h3>
+                  <h3 class="${seleccionado}" class="card-title mb-0">${numeros.numero}</h3>
                 </div>
-                <p style="font-size: 10px; line-height: 1; text-align: center;">${numeros.nombreCliente}</p>
+                <p class="${seleccionado}" style="font-size: 10px; line-height: 1; text-align: center;">${numeros.nombreCliente}</p>
               </div>
             </div>
             `;
