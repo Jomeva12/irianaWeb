@@ -1,4 +1,3 @@
-
 const firebaseConfig = {
   apiKey: "AIzaSyAw1sq90UL2F7BcO-09yReRjrM3ZNxl5S4",
   authDomain: "irianaapp-9bc0d.firebaseapp.com",
@@ -8,9 +7,6 @@ const firebaseConfig = {
   appId: "1:312569676343:web:8859150f2944f487ebb5b2",
   measurementId: "G-3F93T8WH5K"
 };
-
-
-
 
 firebase.initializeApp(firebaseConfig);
 const messaging=firebase.messaging()
