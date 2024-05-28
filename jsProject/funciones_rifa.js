@@ -1,3 +1,4 @@
+
 const firebaseConfig = {
   apiKey: "AIzaSyAw1sq90UL2F7BcO-09yReRjrM3ZNxl5S4",
   authDomain: "irianaapp-9bc0d.firebaseapp.com",
@@ -7,15 +8,24 @@ const firebaseConfig = {
   appId: "1:312569676343:web:8859150f2944f487ebb5b2",
   measurementId: "G-3F93T8WH5K"
 };
-var idNumero = ""
-var miNombre = ""
-var misNumeros = []
-var numerosDisponibles = []
-var numeroSeleccionado = ""
-var intervalId=null
+
+
+
 
 firebase.initializeApp(firebaseConfig);
+const messaging=firebase.messaging()
+//messaging.getToken({vapidkey:"BB8cAgwWoHuPG73WfMr2bZK8CziDVyGQrVN1BZ0Mc0jUsHiPVo8WDRTV5Ns9yXkBUHatw6ebFo8Xgw5V1jM8Uvc"})
+//messaging.onMessage()
+
+
 const db = firebase.firestore();
+
+
+messaging.onMessage((payload) => {
+  console.log('Mensaje recibido. ', payload);
+  // Muestra la notificación usando el payload recibido
+});
+
 
 $(function () {
   const queryString = window.location.search;
@@ -23,12 +33,61 @@ $(function () {
   const idRifa = params.get("id");
   console.log("ID:", idRifa);
 
+
+
+ 
+  $("#nequi").click(function(e){
+    // Evita que se abra el enlace
+    e.preventDefault();
+    // Obtiene el número de teléfono (puedes cambiar este valor por el que necesites)
+    var telefono = "3005128840";
+    // Muestra el cuadro de diálogo con el número de teléfono y un botón para copiar
+    alertify.confirm('Número de NEQUI de Iriana Meléndez', 'Teléfono: ' + telefono + '<br><button id="copyButton" class="btn btn-secondary">Copiar</button>', 
+    function(){
+        // Acción al hacer clic en Aceptar (no es necesario en este caso)
+    },
+    function(){
+        // Acción al hacer clic en Cancelar (no es necesario en este caso)
+    }).set({ 
+        'labels': {
+            ok: null, // Oculta el botón "Aceptar"
+            cancel: 'Cerrar' // Cambia el texto del botón "Cancelar" a "Cerrar"
+        },
+        'closable': false, // Evita que el cuadro de diálogo se cierre haciendo clic fuera de él
+        'type': 'none' // Oculta todos los botones
+    });
+    
+    // Función para copiar el número de teléfono al portapapeles
+    $("#copyButton").click(function(){
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(telefono).select();
+        document.execCommand("copy");
+        $temp.remove();
+        alertify.success('Número de teléfono copiado al portapapeles');
+        alertify.confirm().close();
+    });
+});
+
+
   detectarClic()
   obtenerNumeros(idRifa)
   generarAleatorio()
   obtenerRifa(idRifa)
   modalFotos()
 })
+var idNumero = ""
+var miNombre = ""
+var misNumeros = []
+var numerosDisponibles = []
+var numeroSeleccionado = ""
+var intervalId=null
+
+
+// Llamar a la función para enviar la notificación
+
+
+
 var animation = lottie.loadAnimation({
   container: document.getElementById('lottie-animation-loading'), // Contenedor donde se mostrará la animación
   renderer: 'svg', // Tipo de renderizado (svg, canvas, html)
@@ -234,6 +293,7 @@ function detectarClic() {
     if (estado === "seleccionado" || estado === "pagado") {
       mostrarAlertaError(estado);
     } else {
+
       mostrarAlertify();
     }
   });
@@ -264,9 +324,13 @@ function mostrarAlertify() {
       // Acción al hacer clic en el botón de guardar
       var nombre = value;
       miNombre = value
-      if (idNumero) {
+      if (nombre==="") {
+        alertify.error('No se puede guardar nombre vacío');
+        setTimeout(mostrarAlertify, 1000);
+      } else {
+         if (idNumero) {
         db.collection("numeroRifa").doc(idNumero).update({
-          nombreCliente: nombre,
+          nombreCliente: nombre.toLowerCase(),
           estado: "seleccionado"
         })
           .then(() => {
@@ -283,6 +347,8 @@ function mostrarAlertify() {
       } else {
         console.error("ID del número no encontrado.");
       }
+      }
+     
     },
     function () {
       // Acción al hacer clic en el botón de cancelar
