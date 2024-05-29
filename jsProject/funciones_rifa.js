@@ -52,6 +52,7 @@ $(function () {
         'closable': false, // Evita que el cuadro de diálogo se cierre haciendo clic fuera de él
         'type': 'none' // Oculta todos los botones
     });
+  
     
     // Función para copiar el número de teléfono al portapapeles
     $("#copyButton").click(function(){
@@ -249,14 +250,15 @@ function obtenerNumeros(idRifa) {
             let nombreClienteFormateado = capitalizeWords(numeros.nombreCliente);
             // Construye la plantilla de la tarjeta con el color y el estado determinados
             plantilla += `
-            <div class="${tarjetaClass} col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0; cursor: ${ganador ? "default" : "pointer"};" data-id="${numeros.id}" data-numero="${numeros.numero}" data-estado="${estado}" >
-              <div class="card  ${color} ${claseEfecto}" style="border-radius: 10px;" >
-                <div class="card-body p-0 text-center " style="padding: 0;">
-                  <h3 class="${seleccionado}" class="card-title mb-0">${numeros.numero}</h3>
-                </div>
-                <p class="${seleccionado}" style="font-size: 10px; line-height: 1; text-align: center;">${nombreClienteFormateado}</p>
-              </div>
-            </div>
+            <div class="${tarjetaClass} col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0; cursor: ${ganador ? 'default' : 'pointer'};" data-id="${numeros.id}" data-numero="${numeros.numero}" data-estado="${estado}">
+  <div class="card ${color} ${claseEfecto}" style="border-radius: 10px; overflow: visible;">
+    <div class="card-body p-0 text-center" style="padding: 0;">
+      <h3 class="${seleccionado} card-title mb-0">${numeros.numero}</h3>
+    </div>
+    <p class="${seleccionado}" style="font-size: 10px; line-height: 1; text-align: center;">${nombreClienteFormateado}</p>
+  </div>
+</div>
+
             `;
           });
 
@@ -285,6 +287,48 @@ function capitalizeWords(str) {
 
 
 // data-toggle="modal" data-target=".bd-example-modal-sm"
+// function detectarClic() {
+//   $("#listadoNumeros").on('click', '.tarjeta', function () {
+//     numeroSeleccionado = $(this).data("numero");
+//     var estado = $(this).data("estado");
+//     idNumero = $(this).data("id");
+
+//     // Verificar el estado y mostrar la alerta correspondiente
+//     if (estado === "seleccionado" || estado === "pagado") {
+//       mostrarAlertaError(estado);
+//     } else {
+//       // Mostrar la animación Lottie más grande
+//       var offset = $(this).offset();
+//       var width = $(this).outerWidth();
+//       var height = $(this).outerHeight();
+
+//       var scaleFactor = 3; // Factor de escala para agrandar la animación
+//       var newWidth = width * scaleFactor;
+//       var newHeight = height * scaleFactor;
+//       var newTop = offset.top - (newHeight - height) / 2;
+//       var newLeft = offset.left - (newWidth - width) / 2;
+
+//       $("#lottie-container").css({
+//         display: "flex",
+//         top: newTop,
+//         left: newLeft,
+//         width: newWidth,
+//         height: newHeight
+//       });
+
+//       lottieAnimation.play();
+
+//       lottieAnimation.addEventListener('complete', function() {
+//         // Retarda la desaparición del contenedor de la animación
+//         setTimeout(function() {
+//           $("#lottie-container").fadeOut();
+//         }, 1000); // 2000 ms = 2 segundos de retraso
+//       });
+
+//       mostrarAlertify();
+//     }
+//   });
+// }
 
 function detectarClic() {
   $("#listadoNumeros").on('click', '.tarjeta', function () {
@@ -296,11 +340,81 @@ function detectarClic() {
     if (estado === "seleccionado" || estado === "pagado") {
       mostrarAlertaError(estado);
     } else {
-
       mostrarAlertify();
     }
   });
 }
+
+function mostrarAlertify() {
+  // Crear un formulario personalizado dentro del alertify
+  alertify.prompt('Nombre', 'Ingresa tu nombre', miNombre,
+    function (evt, value) {
+      // Acción al hacer clic en el botón de guardar
+      var nombre = value;
+      miNombre = value;
+      if (nombre === "") {
+        alertify.error('No se puede guardar nombre vacío');
+        setTimeout(mostrarAlertify, 1000);
+      } else {
+        var numerosSeleccionadosHTML = $("#numerosSeleccionados").html();
+        // Concatenar el número seleccionado al contenido existente
+        numerosSeleccionadosHTML += numeroSeleccionado + ", ";
+        // Establecer el nuevo contenido en el elemento
+       
+        if (idNumero) {
+          db.collection("numeroRifa").doc(idNumero).update({
+            nombreCliente: nombre.toLowerCase(),
+            estado: "seleccionado"
+          })
+          .then(() => {
+            var numerosSeleccionadosHTML = $("#numerosSeleccionados").html();
+            // Concatenar el número seleccionado al contenido existente
+            numerosSeleccionadosHTML += numeroSeleccionado + ", ";
+            // Establecer el nuevo contenido en el elemento
+            $("#numerosSeleccionados").html(numerosSeleccionadosHTML);
+            alertify.message('Guardado el número');
+
+            // Agregar la clase de efecto a la tarjeta
+            var tarjeta = $(`[data-id='${idNumero}']`);
+            tarjeta.addClass("custom-glow-red-effect");
+// Ajustar el efecto de resplandor
+
+            // Retirar la clase de efecto después de un tiempo
+            
+
+          })
+          .catch((error) => {
+            console.error("Error actualizando el nombre del cliente: ", error);
+          });
+        } else {
+          console.error("ID del número no encontrado.");
+        }
+      }
+    },
+    function () {
+      // Acción al hacer clic en el botón de cancelar
+      console.log('Cancelado');
+    }
+  ).set('labels', { ok: 'Guardar', cancel: 'Cancelar' }); // Cambiar etiquetas de los botones
+}
+
+
+
+// function detectarClic() {
+//   $("#listadoNumeros").on('click', '.tarjeta', function () {
+//     numeroSeleccionado = $(this).data("numero");
+//     var estado = $(this).data("estado");
+//     idNumero = $(this).data("id");
+
+//     // Verificar el estado y mostrar la alerta correspondiente
+//     if (estado === "seleccionado" || estado === "pagado") {
+//       mostrarAlertaError(estado);
+//     } else {
+
+//       mostrarAlertify();
+//     }
+//   });
+// }
 function mostrarAlertaError(estado) {
   var mensaje = "";
 
@@ -320,45 +434,45 @@ function mostrarAlertaError(estado) {
 
 
 
-function mostrarAlertify() {
-  // Crear un formulario personalizado dentro del alertify
-  alertify.prompt('Nombre', 'Ingresa tu nombre', miNombre,
-    function (evt, value) {
-      // Acción al hacer clic en el botón de guardar
-      var nombre = value;
-      miNombre = value
-      if (nombre==="") {
-        alertify.error('No se puede guardar nombre vacío');
-        setTimeout(mostrarAlertify, 1000);
-      } else {
-         if (idNumero) {
-        db.collection("numeroRifa").doc(idNumero).update({
-          nombreCliente: nombre.toLowerCase(),
-          estado: "seleccionado"
-        })
-          .then(() => {
-            var numerosSeleccionadosHTML = $("#numerosSeleccionados").html();
-            // Concatenar el número seleccionado al contenido existente
-            numerosSeleccionadosHTML += numeroSeleccionado + ", ";
-            // Establecer el nuevo contenido en el elemento
-            $("#numerosSeleccionados").html(numerosSeleccionadosHTML);
-            alertify.message('Guardado el número');
-          })
-          .catch((error) => {
-            console.error("Error actualizando el nombre del cliente: ", error);
-          });
-      } else {
-        console.error("ID del número no encontrado.");
-      }
-      }
+// function mostrarAlertify() {
+//   // Crear un formulario personalizado dentro del alertify
+//   alertify.prompt('Nombre', 'Ingresa tu nombre', miNombre,
+//     function (evt, value) {
+//       // Acción al hacer clic en el botón de guardar
+//       var nombre = value;
+//       miNombre = value
+//       if (nombre==="") {
+//         alertify.error('No se puede guardar nombre vacío');
+//         setTimeout(mostrarAlertify, 1000);
+//       } else {
+//          if (idNumero) {
+//         db.collection("numeroRifa").doc(idNumero).update({
+//           nombreCliente: nombre.toLowerCase(),
+//           estado: "seleccionado"
+//         })
+//           .then(() => {
+//             var numerosSeleccionadosHTML = $("#numerosSeleccionados").html();
+//             // Concatenar el número seleccionado al contenido existente
+//             numerosSeleccionadosHTML += numeroSeleccionado + ", ";
+//             // Establecer el nuevo contenido en el elemento
+//             $("#numerosSeleccionados").html(numerosSeleccionadosHTML);
+//             alertify.message('Guardado el número');
+//           })
+//           .catch((error) => {
+//             console.error("Error actualizando el nombre del cliente: ", error);
+//           });
+//       } else {
+//         console.error("ID del número no encontrado.");
+//       }
+//       }
      
-    },
-    function () {
-      // Acción al hacer clic en el botón de cancelar
-      console.log('Cancelado');
-    }
-  ).set('labels', { ok: 'Guardar', cancel: 'Cancelar' }); // Cambiar etiquetas de los botones
-}
+//     },
+//     function () {
+//       // Acción al hacer clic en el botón de cancelar
+//       console.log('Cancelado');
+//     }
+//   ).set('labels', { ok: 'Guardar', cancel: 'Cancelar' }); // Cambiar etiquetas de los botones
+// }
 
 // Asignar el evento click a las tarjetas
 

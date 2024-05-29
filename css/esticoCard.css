@@ -10,4 +10,78 @@
   .custom-glow-effect {
     animation: custom-glow 2s infinite;
   }
-  
+  /*  */
+  /* @keyframes custom-glow-red {
+    0%, 100% {
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 25px rgba(255, 0, 0, 0.6), 0 0 35px rgba(255, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 40px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.6);
+    }
+}
+
+.custom-glow-red-effect {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    overflow: visible;
+}
+
+.custom-glow-red-effect::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 15px;
+    border-radius: 10px;
+    animation: custom-glow-red 2s infinite;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 25px rgba(255, 0, 0, 0.6), 0 0 35px rgba(255, 0, 0, 0.4);
+}
+
+   */
+
+   @keyframes custom-glow-red {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 0, 0, 1), 0 0 40px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.6);
+    }
+}
+
+@keyframes float-side {
+    0% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    100% {
+        transform: translateX(-5px);
+    }
+}
+
+.custom-glow-red-effect {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    overflow: visible;
+    animation: float-side 3s infinite alternate; /* Aplicar múltiples animaciones */
+}
+
+.custom-glow-red-effect::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.6), 0 0 30px rgba(255, 0, 0, 0.4);
+}
+
