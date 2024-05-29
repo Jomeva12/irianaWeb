@@ -204,6 +204,7 @@ function obtenerNumeros(idRifa) {
             let color;
             let estado;
             let seleccionado="";
+            var claseEfecto=""
             let tarjetaClass = ganador ? "" : "tarjeta"; // Si hay un ganador definido, quita la clase 'tarjeta' para que no sea cliccable
 
             // Si es el ganador, asigna el color rojo, de lo contrario, asigna colores según el estado del número
@@ -229,6 +230,7 @@ function obtenerNumeros(idRifa) {
                   estado = "pagado";
                   break;
                 case "disponible":
+                  claseEfecto="custom-glow-effect"
                   seleccionado = "nombreClienteBlanco";
                   numerosDisponibles.push(numeros.numero)
                   color = "bg-success";
@@ -243,15 +245,16 @@ function obtenerNumeros(idRifa) {
             
               
             }
-
+            
+            let nombreClienteFormateado = capitalizeWords(numeros.nombreCliente);
             // Construye la plantilla de la tarjeta con el color y el estado determinados
             plantilla += `
             <div class="${tarjetaClass} col-2 col-sm-4 col-md-2 mb-3 mx-1" style="padding: 0; cursor: ${ganador ? "default" : "pointer"};" data-id="${numeros.id}" data-numero="${numeros.numero}" data-estado="${estado}" >
-              <div class="card  ${color}" style="border-radius: 10px;" >
-                <div class="card-body p-0 text-center" style="padding: 0;">
+              <div class="card  ${color} ${claseEfecto}" style="border-radius: 10px;" >
+                <div class="card-body p-0 text-center " style="padding: 0;">
                   <h3 class="${seleccionado}" class="card-title mb-0">${numeros.numero}</h3>
                 </div>
-                <p class="${seleccionado}" style="font-size: 10px; line-height: 1; text-align: center;">${numeros.nombreCliente}</p>
+                <p class="${seleccionado}" style="font-size: 10px; line-height: 1; text-align: center;">${nombreClienteFormateado}</p>
               </div>
             </div>
             `;
@@ -271,7 +274,11 @@ function obtenerNumeros(idRifa) {
 }
 
 
-
+function capitalizeWords(str) {
+  return str.replace(/(?:^|\s)\S/g, function(char) {
+    return char.toUpperCase();
+  });
+}
 
 
 
