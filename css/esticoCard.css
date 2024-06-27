@@ -1,4 +1,4 @@
-@keyframes custom-glow {
+/* @keyframes custom-glow {
     0%, 100% {
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
     }
@@ -9,7 +9,7 @@
   
   .custom-glow-effect {
     animation: custom-glow 2s infinite;
-  }
+  } */
   /*  */
   /* @keyframes custom-glow-red {
     0%, 100% {
